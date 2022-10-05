@@ -1,28 +1,40 @@
 import * as bcrypt from 'bcryptjs';
-import { StatusCodes, ILogin } from '../entities/entities';
+import User from '../database/models/User';
+import { ILogin, StatusCodes } from '../entities/entities';
 import { createToken } from '../helper/tokenHelper';
-import LoginModel from '../models/loginModel';
+
+const incorrectEmailOrPassword = 'Incorrect email or password';
 
 export default class LoginService {
-  constructor(private loginModel: LoginModel) { }
+  constructor(private usersModel: typeof User) { }
 
   async verifyLogin(login: ILogin) {
     if (!login.email || !login.password) {
       return { code: StatusCodes.fieldsNot, message: 'All fields must be filled' };
     }
 
-    const user = await this.loginModel.getUserEmail(login.email);
+    const { email, password } = login;
 
-    if (!user) return { code: StatusCodes.tokenNot, message: 'Incorrect email or password' };
+    const user = await this.usersModel.findOne({ where: { email } });
 
-    const verifyPassword = await bcrypt.compare(login.password, user.password);
+    if (!user) return { code: StatusCodes.tokenNot, message: incorrectEmailOrPassword };
+
+    const verifyPassword = await bcrypt.compare(password, user.password);
 
     if (!verifyPassword) {
-      return { code: StatusCodes.tokenNot, message: 'Incorrect email or password' };
+      return { code: StatusCodes.tokenNot, message: incorrectEmailOrPassword };
     }
 
-    const token = createToken(login.email);
+    const token = createToken(email);
 
     return { code: StatusCodes.ok, data: token };
+  }
+
+  async getRoleUser(email: string) {
+    const user = await this.usersModel.findOne({ where: { email } });
+
+    if (!user) return { code: StatusCodes.tokenNot, message: incorrectEmailOrPassword };
+
+    return { code: StatusCodes.ok, data: user.role };
   }
 }
