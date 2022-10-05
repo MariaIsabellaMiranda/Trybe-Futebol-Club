@@ -16,6 +16,7 @@ export enum StatusCodes {
   created = 201,
   tokenNot = 401,
   fieldsNot = 400,
+  notExist = 404,
 }
 
 export interface IMatches {
