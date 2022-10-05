@@ -1,5 +1,6 @@
 import { IMatches, StatusCodes } from '../entities/entities';
 import Matche from '../database/models/Matche';
+import Team from '../database/models/Team';
 
 export default class MatcheService {
   constructor(private matchesModel: typeof Matche) { }
