@@ -1,10 +1,9 @@
 import { sign, verify, SignOptions, Secret } from 'jsonwebtoken';
 import 'dotenv/config';
 
-const SECRET: Secret = process.env.JWT_SECRET || 'lumalandia02031226#';
+const SECRET: Secret = process.env.JWT_SECRET || 'jwt_secret';
 
 const JWT_CONFIG: SignOptions = {
-  expiresIn: '1d',
   algorithm: 'HS256',
 };
 
