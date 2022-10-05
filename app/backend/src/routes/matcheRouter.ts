@@ -2,12 +2,11 @@ import { Router } from 'express';
 import validToken from '../middlewares/auth';
 import Matche from '../database/models/Matche';
 import MatcheController from '../controllers/MatcheController';
-import Team from '../database/models/Team';
 import MatcheService from '../services/MatcheService';
 
 const router = Router();
 
-const matcheService = new MatcheService(Matche, Team);
+const matcheService = new MatcheService(Matche);
 const matcheController = new MatcheController(matcheService);
 
 router.get('/', (req, res) => matcheController.getMatchesAll(req, res));
