@@ -7,14 +7,8 @@ export default class MatcheController {
   async getMatchesAll(req: Request, res: Response): Promise<Response> {
     const { inProgress } = req.query;
 
-    if (inProgress === 'true') {
-      const { code, data } = await this.matchesService.getMatchesInProgressTrue();
-
-      return res.status(code).json(data);
-    }
-
-    if (inProgress === 'false') {
-      const { code, data } = await this.matchesService.getMatchesInProgressFalse();
+    if (inProgress) {
+      const { code, data } = await this.matchesService.getMatchesInProgress(inProgress === 'true');
 
       return res.status(code).json(data);
     }
@@ -25,7 +19,27 @@ export default class MatcheController {
   }
 
   async saveMtaches(req: Request, res: Response): Promise<Response> {
-    const { code, data } = await this.matchesService.saveMatches(req.body);
+    const { code, data, message } = await this.matchesService.saveMatches(req.body);
+
+    if (!data) return res.status(code).json({ message });
+
+    return res.status(code).json(data);
+  }
+
+  async updateByInProgress(req: Request, res: Response): Promise<Response> {
+    const { id } = req.params;
+
+    const { code, data } = await this.matchesService.updateByInProgress(Number(id));
+
+    return res.status(code).json(data);
+  }
+
+  async updateMatcheProgress(req: Request, res: Response): Promise<Response> {
+    const { id } = req.params;
+    const { homeTeamGoals, awayTeamGoals } = req.body;
+
+    const { code, data } = await this.matchesService
+      .updateMatcheProgress(Number(id), homeTeamGoals, awayTeamGoals);
 
     return res.status(code).json(data);
   }
