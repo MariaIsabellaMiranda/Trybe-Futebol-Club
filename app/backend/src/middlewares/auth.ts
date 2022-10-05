@@ -7,7 +7,7 @@ const validToken = (req: Request, res: Response, next: NextFunction) => {
 
   if (!authorization) {
     return res.status(StatusCodes.tokenNot)
-      .json({ message: 'Expired or invalid token' });
+      .json({ message: 'Token must be a valid token' });
   }
 
   try {
@@ -17,7 +17,7 @@ const validToken = (req: Request, res: Response, next: NextFunction) => {
 
     next();
   } catch (err) {
-    res.status(StatusCodes.tokenNot).json({ message: 'Expired or invalid token' });
+    res.status(StatusCodes.tokenNot).json({ message: 'Token must be a valid token' });
   }
 };
 
