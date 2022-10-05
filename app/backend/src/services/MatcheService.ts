@@ -1,6 +1,5 @@
 import { IMatches, StatusCodes } from '../entities/entities';
 import Matche from '../database/models/Matche';
-import Team from '../database/models/Team';
 
 export default class MatcheService {
   constructor(private matchesModel: typeof Matche) { }
@@ -18,24 +17,9 @@ export default class MatcheService {
     return { code: StatusCodes.ok, data };
   }
 
-  async getMatchesInProgressTrue() {
+  async getMatchesInProgress(progress: boolean) {
     const data = await this.matchesModel.findAll(
-      { where: { inProgress: true },
-        include: [{
-          model: Team, as: 'teamHome', attributes: { exclude: ['id'] },
-        },
-        {
-          model: Team, as: 'teamAway', attributes: { exclude: ['id'] },
-        }],
-      },
-    );
-
-    return { code: StatusCodes.ok, data };
-  }
-
-  async getMatchesInProgressFalse() {
-    const data = await this.matchesModel.findAll(
-      { where: { inProgress: false },
+      { where: { inProgress: progress },
         include: [{
           model: Team, as: 'teamHome', attributes: { exclude: ['id'] },
         },
@@ -49,17 +33,36 @@ export default class MatcheService {
   }
 
   async saveMatches(matches: IMatches) {
-    let matchesRefactor = matches;
-
-    if (matchesRefactor.inProgress === 'true') {
-      matchesRefactor = { ...matches, inProgress: 1 };
+    if (matches.homeTeam === matches.awayTeam) {
+      return {
+        code: StatusCodes.tokenNot,
+        message: 'It is not possible to create a match with two equal teams' };
     }
 
-    if (matchesRefactor.inProgress === 'false') {
-      matchesRefactor = { ...matches, inProgress: 2 };
-    }
-    const data = await this.matchesModel.create(matchesRefactor);
+    try {
+      const data = await this.matchesModel.create(matches);
 
-    return { code: StatusCodes.created, data };
+      return { code: StatusCodes.created, data };
+    } catch (error) {
+      return { code: StatusCodes.notExist, message: 'There is no team with such id!' };
+    }
+  }
+
+  async updateByInProgress(id: number) {
+    await this.matchesModel.update({ inProgress: false }, { where: { id } });
+
+    return { code: StatusCodes.ok, data: { message: 'Finished' } };
+  }
+
+  async updateMatcheProgress(id: number, homeId: number, awayId: number) {
+    await this.matchesModel.update(
+      {
+        homeTeamGoals: homeId,
+        awayTeamGoals: awayId,
+      },
+      { where: { id } },
+    );
+
+    return { code: StatusCodes.ok, data: { messa: 'Updated' } };
   }
 }
