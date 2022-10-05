@@ -17,3 +17,12 @@ export enum StatusCodes {
   tokenNot = 401,
   fieldsNot = 400,
 }
+
+export interface IMatches {
+  id?: number,
+  homeTeam: number,
+  awayTeam: number,
+  homeTeamGoals: number,
+  awayTeamGoals: number,
+  inProgress: string | number,
+}
