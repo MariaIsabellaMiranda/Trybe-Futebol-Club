@@ -11,9 +11,9 @@ const validToken = (req: Request, res: Response, next: NextFunction) => {
   }
 
   try {
-    const data = verifyToken(authorization);
+    const user = verifyToken(authorization);
 
-    req.body.user = data;
+    req.body.user = user;
 
     next();
   } catch (err) {
