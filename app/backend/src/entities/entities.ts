@@ -27,3 +27,30 @@ export interface IMatches {
   awayTeamGoals: number,
   inProgress: string | number,
 }
+
+export interface ITeams {
+  id: number,
+  teamName: string,
+  homeM: [
+    {
+      id: number,
+      homeTeam: number,
+      homeTeamGoals: number,
+      awayTeam: number,
+      awayTeamGoals: number,
+      inProgress: boolean
+    } ]
+}
+
+export interface IRatings {
+  name: string,
+  totalPoints: number,
+  totalGames: number,
+  totalVictories: number,
+  totalDraws: number,
+  totalLosses: number,
+  goalsFavor: number,
+  goalsOwn: number,
+  goalsBalance: number,
+  efficiency: number,
+}
