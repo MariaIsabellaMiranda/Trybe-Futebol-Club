@@ -28,10 +28,24 @@ export interface IMatches {
   inProgress: string | number,
 }
 
-export interface ITeams {
+export interface ITeamsHome {
   id: number,
   teamName: string,
   homeM: [
+    {
+      id: number,
+      homeTeam: number,
+      homeTeamGoals: number,
+      awayTeam: number,
+      awayTeamGoals: number,
+      inProgress: boolean
+    } ]
+}
+
+export interface ITeamsAway {
+  id: number,
+  teamName: string,
+  awayM: [
     {
       id: number,
       homeTeam: number,
