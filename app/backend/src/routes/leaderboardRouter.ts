@@ -9,8 +9,8 @@ const router = Router();
 const leaderService = new LeaderboardService(Team, Matche);
 const leaderController = new LeaderboardController(leaderService);
 
+router.get('/', (req, res) => leaderController.getAllTeams(req, res));
 router.get('/home', (req, res) => leaderController.getHomeTeams(req, res));
 router.get('/away', (req, res) => leaderController.getAwayTeams(req, res));
-router.get('/', (req, res) => leaderController.getAllTeams(req, res));
 
 export default router;
