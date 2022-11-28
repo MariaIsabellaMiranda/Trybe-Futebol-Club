@@ -13,6 +13,8 @@ export default class TeamService {
   async getTeamId(id: number) {
     const team = await this.teamsModel.findByPk(id);
 
+    if (!team) return { code: StatusCodes.notExist, message: 'Not Found' };
+
     return { code: StatusCodes.ok, data: team };
   }
 }
