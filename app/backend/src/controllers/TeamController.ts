@@ -12,7 +12,9 @@ export default class TeamController {
 
   async getTeamId(req: Request, res: Response): Promise<Response> {
     const { id } = req.params;
-    const { code, data } = await this.teamsService.getTeamId(Number(id));
+    const { code, data, message } = await this.teamsService.getTeamId(Number(id));
+
+    if (!data) return res.status(code).json(message);
 
     return res.status(code).json(data);
   }
