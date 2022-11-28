@@ -10,8 +10,9 @@ const matcheService = new MatcheService(Matche);
 const matcheController = new MatcheController(matcheService);
 
 router.get('/', (req, res) => matcheController.getMatchesAll(req, res));
-router.post('/', validToken, (req, res) => matcheController.saveMtaches(req, res));
-router.patch('/:id/finish', (req, res) => matcheController.updateByInProgress(req, res));
-router.patch('/:id', (req, res) => matcheController.updateMatcheProgress(req, res));
+router.post('/', validToken, (req, res) => matcheController.saveMatches(req, res));
+router
+  .patch('/:id/finish', validToken, (req, res) => matcheController.updateByInProgress(req, res));
+router.patch('/:id', validToken, (req, res) => matcheController.updateMatcheProgress(req, res));
 
 export default router;
