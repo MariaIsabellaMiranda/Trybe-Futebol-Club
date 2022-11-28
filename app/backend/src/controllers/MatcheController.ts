@@ -18,7 +18,7 @@ export default class MatcheController {
     return res.status(code).json(data);
   }
 
-  async saveMtaches(req: Request, res: Response): Promise<Response> {
+  async saveMatches(req: Request, res: Response): Promise<Response> {
     const { code, data, message } = await this.matchesService.saveMatches(req.body);
 
     if (!data) return res.status(code).json({ message });
