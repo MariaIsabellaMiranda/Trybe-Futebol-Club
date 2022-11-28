@@ -13,7 +13,6 @@ export default class LeaderboardService {
       include: [{
         model: Matche, as: 'homeM', where: { inProgress: false }, attributes: { exclude: ['id'] },
       }],
-
     });
 
     const ratings: IRatings[] = data.map((teams) => leaderboardHomeHelper.totalRatingHome(teams));
