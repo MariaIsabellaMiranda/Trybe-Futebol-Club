@@ -40,11 +40,13 @@ export default class MatcheService {
         message: 'It is not possible to create a match with two equal teams' };
     }
 
-    const data = await this.matchesModel.create(matches);
+    try {
+      const data = await this.matchesModel.create(matches);
 
-    if (!data) return { code: StatusCodes.notExist, message: 'There is no team with such id!' };
-
-    return { code: StatusCodes.created, data };
+      return { code: StatusCodes.created, data };
+    } catch (error) {
+      return { code: StatusCodes.notExist, message: 'There is no team with such id!' };
+    }
   }
 
   async updateByInProgress(id: number) {

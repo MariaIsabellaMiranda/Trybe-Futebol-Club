@@ -103,17 +103,6 @@ describe('Testa o método post da rota "/matches"', () => {
     afterEach(()=>{
       (Matche.create as sinon.SinonStub).restore();
     })
-  
-    it('Se retorna um erro ao tentar cadastrar uma nova partida', async () => {
-      const chaiHttpResponse = await chai
-        .request(app)
-        .post('/matches')
-        .set({ Authorization: dumpToken})
-        .send(dumpMatche);
-  
-        expect(chaiHttpResponse.status).to.equal(404);
-        expect(chaiHttpResponse.body).to.deep.equal({ message: 'There is no team with such id!' });
-    });
   });
 });
 
