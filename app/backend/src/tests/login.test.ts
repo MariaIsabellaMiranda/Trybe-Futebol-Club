@@ -1,4 +1,4 @@
-import { dumpUser, dumpToken } from './userMock';
+import { dumpUser, dumpToken } from './mocks/userMock';
 import * as sinon from 'sinon';
 import * as chai from 'chai';
 // @ts-ignore
@@ -14,8 +14,6 @@ chai.use(chaiHttp);
 const { expect } = chai;
 
 describe('Testa o método post da rota "/login"', () => {
-  let chaiHttpResponse: Response;
-
   beforeEach(async () => {
     sinon
       .stub(User, "findOne")
@@ -27,7 +25,7 @@ describe('Testa o método post da rota "/login"', () => {
   })
 
   it('se é possível fazer login com dados corretos', async () => {
-    chaiHttpResponse = await chai
+    const chaiHttpResponse = await chai
       .request(app)
       .post('/login')
       .send({ email: 'admin@admin.com', password: 'secret_admin' })
@@ -37,7 +35,7 @@ describe('Testa o método post da rota "/login"', () => {
   });
 
   it('se não é possível fazer login sem informar um email', async () => {
-    chaiHttpResponse = await chai
+    const chaiHttpResponse = await chai
       .request(app)
       .post('/login')
       .send({ password: dumpUser.password})
@@ -47,7 +45,7 @@ describe('Testa o método post da rota "/login"', () => {
   });
 
   it('se não é possível fazer login sem informar uma senha', async () => {
-    chaiHttpResponse = await chai
+    const chaiHttpResponse = await chai
       .request(app)
       .post('/login')
       .send({ email: dumpUser.email })
@@ -57,7 +55,7 @@ describe('Testa o método post da rota "/login"', () => {
   });
 
   it('se não é possível fazer login com um email inválido', async () => {
-    chaiHttpResponse = await chai
+    const chaiHttpResponse = await chai
       .request(app)
       .post('/login')
       .send({ email: 'emailError', password: dumpUser.password})
@@ -67,7 +65,7 @@ describe('Testa o método post da rota "/login"', () => {
   });
 
   it('se não é possível fazer login com uma senha inválida', async () => {
-    chaiHttpResponse = await chai
+    const chaiHttpResponse = await chai
       .request(app)
       .post('/login')
       .send({ email: dumpUser.email, password: 'passwordError' })
@@ -78,8 +76,6 @@ describe('Testa o método post da rota "/login"', () => {
 });
 
 describe('Testa o método get da rota "/login/validate"', () => {
-  let chaiHttpResponse: Response;
-
   beforeEach(async () => {
     sinon
       .stub(User, "findOne")
@@ -91,7 +87,7 @@ describe('Testa o método get da rota "/login/validate"', () => {
   })
 
   it('se é retornado os dados corretamente ao passar um token correto', async () => {
-    chaiHttpResponse = await chai
+    const chaiHttpResponse = await chai
       .request(app)
       .get('/login/validate')
       .set('authorization', dumpToken)
@@ -101,12 +97,12 @@ describe('Testa o método get da rota "/login/validate"', () => {
   });
 
   it('se é retornado erro caso token seja inválido', async () => {
-    chaiHttpResponse = await chai
+    const chaiHttpResponse = await chai
       .request(app)
       .get('/login/validate')
       .set('authorization', '')
 
     expect(chaiHttpResponse.status).to.equal(401);
-    expect(chaiHttpResponse.body).to.deep.equal({ message: 'Expired or invalid token' });
+    expect(chaiHttpResponse.body).to.deep.equal({ message: 'Token must be a valid token' });
   });
 });
